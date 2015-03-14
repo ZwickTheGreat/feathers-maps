@@ -3,6 +3,7 @@ package cz.j4w.map {
 	import flash.geom.Rectangle;
 	import starling.display.DisplayObject;
 	import starling.display.Sprite;
+	import starling.events.EnterFrameEvent;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -19,6 +20,10 @@ package cz.j4w.map {
 		private var _maximumScale:Number;
 		private var _movementBounds:Rectangle;
 		private var viewPort:Rectangle;
+		
+		private var movement:Point = new Point();
+		private var decelerationRatio:Number = 0.95;
+		private var touching:Boolean;
 		
 		/**
 		 * Image
@@ -44,19 +49,24 @@ package cz.j4w.map {
 			maximumScale = params.maximumScale;
 			
 			addEventListener(TouchEvent.TOUCH, onTouch);
+			addEventListener(EnterFrameEvent.ENTER_FRAME, onEnterFrame);
 			addChild(contents);
 		}
 		
 		private function onTouch(event:TouchEvent):void {
 			var touches:Vector.<Touch> = event.getTouches(this, TouchPhase.MOVED);
 			
-			if (touches.length == 1) {
+			if (touches.length == 0) {
+				if (event.getTouch(this, TouchPhase.ENDED))
+					touching = false;
+			} else if (touches.length == 1) {
 				// one finger touching -> move
-				var delta:Point = touches[0].getMovement(parent);
+				touches[0].getMovement(parent, movement);
 				if (!disableMovement) {
-					x += delta.x;
-					y += delta.y;
+					x += movement.x;
+					y += movement.y;
 				}
+				touching = true;
 			} else if (touches.length == 2) {
 				// two fingers touching -> rotate and scale
 				var touchA:Touch = touches[0];
@@ -174,6 +184,20 @@ package cz.j4w.map {
 		
 		public function set maximumScale(value:Number):void {
 			_maximumScale = value;
+		}
+		
+		//*************************************************************//
+		//********************  Event Listeners  **********************//
+		//*************************************************************//
+		
+		private function onEnterFrame(e:EnterFrameEvent):void {
+			if (!touching) {
+				movement.x *= decelerationRatio;
+				movement.y *= decelerationRatio;
+				x += movement.x;
+				y += movement.y;
+				applyBounds();
+			}
 		}
 	
 	}
