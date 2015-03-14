@@ -88,8 +88,10 @@ package cz.j4w.map {
 			if (!options)
 				options = {};
 			
+			var childIndex:uint = options.index >= 0 ? options.index : mapContainer.numChildren;
+			
 			var layer:MapLayer = new MapLayer(this, id, options);
-			mapContainer.addChild(layer);
+			mapContainer.addChildAt(layer, childIndex);
 			mapContainer.addChild(markersContainer); // markers are always on top
 			
 			layers[id] = layer;
@@ -178,7 +180,7 @@ package cz.j4w.map {
 			var center:Point = getCenter();
 			
 			var tweenObject:Object = {x: center.x, y: center.y, scale: touchSheet.scaleX};
-			currentTween = Starling.juggler.tween(tweenObject, time, {x: x, y: y, scale: scale, onUpdate: tweenUpdate, onUpdateArgs: [tweenObject], transition: Transitions.EASE_IN_OUT}) as Tween;
+			currentTween = Starling.juggler.tween(tweenObject, time, {x: x, y: y, scale: scale, onComplete: tweenComplete, onUpdate: tweenUpdate, onUpdateArgs: [tweenObject], transition: Transitions.EASE_IN_OUT}) as Tween;
 			
 			return currentTween;
 		}
@@ -197,6 +199,11 @@ package cz.j4w.map {
 		private function tweenUpdate(tweenObject:Object):void {
 			touchSheet.scaleX = touchSheet.scaleY = tweenObject.scale;
 			setCenterXY(tweenObject.x, tweenObject.y);
+		}
+		
+		private function tweenComplete():void {
+			Starling.juggler.remove(currentTween);
+			currentTween = null;
 		}
 		
 		//*************************************************************//
