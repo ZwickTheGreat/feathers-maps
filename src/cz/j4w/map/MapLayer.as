@@ -11,15 +11,15 @@ package cz.j4w.map {
 	 * @author Jakub Wagner, J4W
 	 */
 	public class MapLayer extends Sprite {
-		private var map:Map;
-		private var id:String;
-		private var urlTemplate:String;
-		private var tiles:Vector.<ImageLoader>;
-		private var tilesDictionary:Dictionary = new Dictionary(true);
-		private var tileSize:int;
+		protected var map:Map;
+		protected var id:String;
+		protected var urlTemplate:String;
+		protected var tiles:Vector.<ImageLoader>;
+		protected var tilesDictionary:Dictionary = new Dictionary(true);
+		protected var tileSize:int;
 		
-		private var notUsedZoomThreshold:int;
-		private var maximumZoom:int;
+		protected var notUsedZoomThreshold:int;
+		protected var maximumZoom:int;
 		
 		public var debugTrace:Boolean = false;
 		
@@ -44,7 +44,7 @@ package cz.j4w.map {
 		/**
 		 * Check tiles and create new ones if needed.
 		 */
-		private function checkTiles():void {
+		protected function checkTiles():void {
 			var mapViewPort:Rectangle = map.viewPort;
 			
 			var zoom:int = map.zoom;
@@ -70,7 +70,7 @@ package cz.j4w.map {
 		/**
 		 * Check tiles visibility and removes those not visible.
 		 */
-		private function checkNotUsedTiles():void {
+		protected function checkNotUsedTiles():void {
 			var mapViewPort:Rectangle = map.viewPort.clone();
 			var zoom:int = map.zoom;
 			
@@ -88,7 +88,7 @@ package cz.j4w.map {
 				trace("Removed", tilesRemoved, "tiles.")
 		}
 		
-		private function createTile(x:int, y:int, actualTileSize:Number, zoom:int, scale:int):Boolean {
+		protected function createTile(x:int, y:int, actualTileSize:Number, zoom:int, scale:int):Boolean {
 			var key:String = getKey(x, y, zoom);
 			
 			if (tilesDictionary[key]) {
@@ -110,7 +110,7 @@ package cz.j4w.map {
 			return true;
 		}
 		
-		private function removeTile(tile:MapTile):void {
+		protected function removeTile(tile:MapTile):void {
 			tile.removeFromParent(true);
 			
 			var key:String = getKey(tile.mapX, tile.mapY, tile.zoom);
@@ -120,7 +120,7 @@ package cz.j4w.map {
 		
 		[Inline]
 		
-		private function getKey(x:int, y:int, zoom:int):String {
+		protected function getKey(x:int, y:int, zoom:int):String {
 			return x + "x" + y + "x" + zoom;
 		}
 		
