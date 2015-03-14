@@ -1,9 +1,11 @@
 package cz.j4w.map {
 	import com.imageworks.debug.Debugger;
+	import cz.j4w.map.events.MapEvent;
 	import feathers.core.FeathersControl;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -24,6 +26,7 @@ package cz.j4w.map {
 		protected var mapContainer:Sprite;
 		protected var markersContainer:Sprite;
 		protected var touchSheet:TouchSheet;
+		protected var markers:Dictionary;
 		
 		protected var layers:Array;
 		protected var mapViewPort:Rectangle;
@@ -35,6 +38,7 @@ package cz.j4w.map {
 		override protected function initialize():void {
 			layers = [];
 			
+			markers = new Dictionary();
 			mapViewPort = new Rectangle();
 			mapContainer = new Sprite();
 			markersContainer = new Sprite();
@@ -114,24 +118,36 @@ package cz.j4w.map {
 			}
 		}
 		
-		public function addMarker(id:String, x:Number, y:Number, displayObject:DisplayObject):void {
+		public function addMarker(id:String, x:Number, y:Number, displayObject:DisplayObject, data:Object = null):MapMarker {
 			displayObject.name = id;
 			displayObject.x = x;
 			displayObject.y = y;
 			markersContainer.addChild(displayObject);
+			
+			var mapMarker:MapMarker = new MapMarker(id, displayObject, data);
+			markers[id] = mapMarker;
+			return mapMarker;
 		}
 		
-		public function removeMarker(id:String):DisplayObject {
-			var marker:DisplayObject = markersContainer.getChildByName(id);
-			marker.removeFromParent();
-			return marker;
+		private function getMarker(id:String):MapMarker {
+			return markers[id] as MapMarker;
+		}
+		
+		public function removeMarker(id:String):MapMarker {
+			var mapMarker:MapMarker = markers[id] as MapMarker;
+			
+			if (mapMarker) {
+				var displayObject:DisplayObject = mapMarker.displayObject;
+				displayObject.removeFromParent();
+				delete markers[id];
+			}
+			
+			return mapMarker;
 		}
 		
 		public function removeAllMarkers():void {
-			while (markersContainer.numChildren) {
-				var marker:DisplayObject = markersContainer.getChildAt(0);
-				removeMarker(marker.name);
-			}
+			markersContainer.removeChildren();
+			markers = new Dictionary();
 		}
 		
 		public function get viewPort():Rectangle {
@@ -218,6 +234,15 @@ package cz.j4w.map {
 			var touch:Touch = e.getTouch(this, TouchPhase.MOVED);
 			if (touch)
 				cancelTween();
+			
+			touch = e.getTouch(markersContainer, TouchPhase.ENDED);
+			if (touch) {
+				var displayObject:DisplayObject = touch.target;
+				if (displayObject && displayObject.parent == markersContainer) {
+					var marker:MapMarker = getMarker(displayObject.name);
+					dispatchEvent(new MapEvent(MapEvent.MARKER_TRIGGERED, false, marker));
+				}
+			}
 		}
 		
 		private function onNativeStageMouseWheel(e:MouseEvent):void {
