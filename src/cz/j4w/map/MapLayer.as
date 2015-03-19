@@ -11,6 +11,7 @@ package cz.j4w.map {
 	 * @author Jakub Wagner, J4W
 	 */
 	public class MapLayer extends Sprite {
+		private var mapTilesBuffer:MapTilesBuffer;
 		protected var map:Map;
 		protected var id:String;
 		protected var urlTemplate:String;
@@ -23,10 +24,11 @@ package cz.j4w.map {
 		
 		public var debugTrace:Boolean = false;
 		
-		public function MapLayer(map:Map, id:String, options:Object) {
+		public function MapLayer(map:Map, id:String, options:Object, buffer:MapTilesBuffer) {
 			super();
 			this.id = id;
 			this.map = map;
+			this.mapTilesBuffer = buffer;
 			this.tiles = new Vector.<ImageLoader>();
 			
 			this.urlTemplate = options.urlTemplate;
@@ -97,7 +99,7 @@ package cz.j4w.map {
 			
 			var url:String = urlTemplate.replace("${z}", maximumZoom - zoom).replace("${x}", x).replace("${y}", y);
 			
-			var tile:ImageLoader = new MapTile(x, y, zoom);
+			var tile:ImageLoader = mapTilesBuffer.create(x, y, zoom);
 			tile.source = url;
 			tile.setSize(tileSize, tileSize);
 			tile.x = x * actualTileSize;
@@ -111,7 +113,8 @@ package cz.j4w.map {
 		}
 		
 		protected function removeTile(tile:MapTile):void {
-			tile.removeFromParent(true);
+			mapTilesBuffer.release(tile);
+			tile.removeFromParent();
 			
 			var key:String = getKey(tile.mapX, tile.mapY, tile.zoom);
 			tilesDictionary[key] = null;

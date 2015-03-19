@@ -21,8 +21,10 @@ package cz.j4w.map {
 	 */
 	public class Map extends FeathersControl {
 		private var currentTween:Tween;
-		protected var mapOptions:MapOptions;
 		
+		protected var mapTilesBuffer:MapTilesBuffer;
+		
+		protected var mapOptions:MapOptions;
 		protected var mapContainer:Sprite;
 		protected var markersContainer:Sprite;
 		protected var touchSheet:TouchSheet;
@@ -38,6 +40,7 @@ package cz.j4w.map {
 		override protected function initialize():void {
 			layers = [];
 			
+			mapTilesBuffer = new MapTilesBuffer();
 			markers = new Dictionary();
 			mapViewPort = new Rectangle();
 			mapContainer = new Sprite();
@@ -58,6 +61,7 @@ package cz.j4w.map {
 		
 		override public function dispose():void {
 			super.dispose();
+			mapTilesBuffer.dispose();
 			Starling.current.nativeStage.removeEventListener(MouseEvent.MOUSE_WHEEL, onNativeStageMouseWheel);
 		}
 		
@@ -94,7 +98,7 @@ package cz.j4w.map {
 			
 			var childIndex:uint = options.index >= 0 ? options.index : mapContainer.numChildren;
 			
-			var layer:MapLayer = new MapLayer(this, id, options);
+			var layer:MapLayer = new MapLayer(this, id, options, mapTilesBuffer);
 			mapContainer.addChildAt(layer, childIndex);
 			mapContainer.addChild(markersContainer); // markers are always on top
 			

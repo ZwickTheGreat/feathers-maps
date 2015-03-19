@@ -9,16 +9,39 @@ package cz.j4w.map {
 	 * @author Jakub Wagner, J4W
 	 */
 	public class MapTile extends ImageLoader {
+		protected var buffer:MapTilesBuffer;
+		
+		public var sourceBackup:Object;
+		
 		public var mapX:int;
 		public var mapY:int;
 		public var zoom:int;
 		
-		public function MapTile(mapX:int, mapY:int, zoom:int) {
+		public function MapTile(mapX:int, mapY:int, zoom:int, buffer:MapTilesBuffer) {
 			super();
+			
+			this.buffer = buffer;
 			this.zoom = zoom;
 			this.mapY = mapY;
 			this.mapX = mapX;
 		}
+		
+		override public function set source(value:Object):void {
+			if (!sourceBackup) {
+				buffer.currentlyBuffering.push(this);
+				sourceBackup = value;
+				return;
+			}
+			super.source = value;
+		}
+		
+		public function get isDisposed():Boolean {
+			return _isDisposed;
+		}
+		
+		//*************************************************************//
+		//********************  Event Listeners  **********************//
+		//*************************************************************//
 		
 		override protected function loader_completeHandler(event:flash.events.Event):void {
 			var loaderInfo:LoaderInfo = event.target as LoaderInfo;
@@ -26,6 +49,7 @@ package cz.j4w.map {
 				visible = false;
 			else {
 				super.loader_completeHandler(event);
+				visible = true;
 				alpha = 0;
 				Starling.juggler.tween(this, .2, {alpha: 1});
 			}
