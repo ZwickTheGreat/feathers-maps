@@ -21,6 +21,7 @@ package cz.j4w.map {
 	 */
 	public class Map extends FeathersControl {
 		private var currentTween:Tween;
+		private var tweenTransition:Function = Transitions.getTransition(Transitions.EASE_IN_OUT);
 		
 		protected var mapTilesBuffer:MapTilesBuffer;
 		
@@ -199,8 +200,9 @@ package cz.j4w.map {
 			
 			var center:Point = getCenter();
 			
-			var tweenObject:Object = {x: center.x, y: center.y, scale: touchSheet.scaleX};
-			currentTween = Starling.juggler.tween(tweenObject, time, {x: x, y: y, scale: scale, onComplete: tweenComplete, onUpdate: tweenUpdate, onUpdateArgs: [tweenObject], transition: Transitions.EASE_IN_OUT}) as Tween;
+			var tweenObject:Object = {ratio: 0, x: center.x, y: center.y, scale: touchSheet.scaleX};
+			var tweenTo:Object = {ratio: 1, x: x, y: y, scale: scale};
+			currentTween = Starling.juggler.tween(tweenObject, time, {ratio: 1, onComplete: tweenComplete, onUpdate: tweenUpdate, onUpdateArgs: [tweenObject, tweenTo]}) as Tween;
 			
 			return currentTween;
 		}
@@ -216,9 +218,19 @@ package cz.j4w.map {
 			return currentTween != null;
 		}
 		
-		private function tweenUpdate(tweenObject:Object):void {
-			touchSheet.scaleX = touchSheet.scaleY = tweenObject.scale;
-			setCenterXY(tweenObject.x, tweenObject.y);
+		private function tweenUpdate(tweenObject:Object, tweenTo:Object):void {
+			// scale tween is much slower then position
+			
+			var ratio:Number = tweenObject.ratio;
+			var r1:Number = tweenTransition(ratio);
+			var r2:Number = tweenTransition(ratio * 3 <= 1 ? ratio * 3 : 1); // faster ratio
+			
+			var currentScale:Number = tweenObject.scale + (tweenTo.scale - tweenObject.scale) * r1;
+			var currentX:Number = tweenObject.x + (tweenTo.x - tweenObject.x) * r2;
+			var currentY:Number = tweenObject.y + (tweenTo.y - tweenObject.y) * r2;
+			
+			touchSheet.scaleX = touchSheet.scaleY = currentScale;
+			setCenterXY(currentX, currentY);
 		}
 		
 		private function tweenComplete():void {
@@ -265,6 +277,10 @@ package cz.j4w.map {
 				newScale = Math.min(mapOptions.maximumScale, newScale);
 				tweenTo(center.x, center.y, newScale, .3);
 			}
+		}
+		
+		private function sortMarkersFunction(d1:DisplayObject, d2:DisplayObject):int {
+			return d1.x > d2.x ? 1 : -1;
 		}
 	
 	}
