@@ -71,14 +71,14 @@ package cz.j4w.map {
 			update();
 		}
 		
-		private function update():void {
+		protected function update():void {
 			getBounds(touchSheet, mapViewPort); // calculate mapViewPort before bounds check
 			touchSheet.applyBounds();
 			getBounds(touchSheet, mapViewPort); // calculate mapViewPort after bounds check
 			updateMarkers();
 		}
 		
-		private function updateMarkers():void {
+		protected function updateMarkers():void {
 			var n:int = markersContainer.numChildren;
 			var sx:Number = 1 / touchSheet.scaleX;
 			for (var i:int = 0; i < n; i++) {
@@ -134,7 +134,7 @@ package cz.j4w.map {
 			return mapMarker;
 		}
 		
-		private function getMarker(id:String):MapMarker {
+		public function getMarker(id:String):MapMarker {
 			return markers[id] as MapMarker;
 		}
 		
@@ -218,7 +218,7 @@ package cz.j4w.map {
 			return currentTween != null;
 		}
 		
-		private function tweenUpdate(tweenObject:Object, tweenTo:Object):void {
+		protected function tweenUpdate(tweenObject:Object, tweenTo:Object):void {
 			// scale tween is much slower then position
 			
 			var ratio:Number = tweenObject.ratio;
@@ -233,7 +233,7 @@ package cz.j4w.map {
 			setCenterXY(currentX, currentY);
 		}
 		
-		private function tweenComplete():void {
+		protected function tweenComplete():void {
 			Starling.juggler.remove(currentTween);
 			currentTween = null;
 		}
