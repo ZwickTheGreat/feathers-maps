@@ -20,6 +20,8 @@ package cz.j4w.map {
 		private var _maximumScale:Number;
 		private var _movementBounds:Rectangle;
 		private var viewPort:Rectangle;
+		private var viewportAutoUpdate:Boolean;
+		private var originalViewPort:Rectangle;
 		
 		private var movement:Point = new Point();
 		private var decelerationRatio:Number = 0.95;
@@ -45,8 +47,13 @@ package cz.j4w.map {
 			disableRotation = params.disableRotation ? true : false;
 			disableMovement = params.disableMovement ? true : false;
 			movementBounds = params.movementBounds;
+			viewportAutoUpdate = params.hasOwnProperty("viewportAutoUpdate") && params.viewportAutoUpdate ? true : false;
 			minimumScale = params.minimumScale;
 			maximumScale = params.maximumScale;
+			
+			if (viewportAutoUpdate) {
+				originalViewPort = viewPort.clone();
+			}
 			
 			addEventListener(TouchEvent.TOUCH, onTouch);
 			addEventListener(EnterFrameEvent.ENTER_FRAME, onEnterFrame);
@@ -87,7 +94,7 @@ package cz.j4w.map {
 				// update pivot point based on previous center
 				var previousLocalA:Point = touchA.getPreviousLocation(this);
 				var previousLocalB:Point = touchB.getPreviousLocation(this);
-				if (!disableMovement) {
+				if (!disableMovement && !disableZooming) {
 					pivotX = (previousLocalA.x + previousLocalB.x) * 0.5;
 					pivotY = (previousLocalA.y + previousLocalB.y) * 0.5;
 					
@@ -114,10 +121,15 @@ package cz.j4w.map {
 					}
 				}
 			}
+			applyBounds();
 		}
 		
 		public function applyBounds():void {
 			if (movementBounds) {
+				if (viewportAutoUpdate) {
+					viewPort.x = -x;
+					viewPort.y = -y;
+				}
 				if (viewPort.left < movementBounds.left) {
 					this.x += (viewPort.left - movementBounds.left) * scaleX;
 				} else if (viewPort.right > movementBounds.right) {
