@@ -123,6 +123,14 @@ package cz.j4w.map {
 			}
 		}
 		
+		public function hasLayer(id:String):Boolean {
+			return layers[id];
+		}
+		
+		public function getLayer(id:String):MapLayer {
+			return layers[id];
+		}
+		
 		public function addMarker(id:String, x:Number, y:Number, displayObject:DisplayObject, data:Object = null):MapMarker {
 			displayObject.name = id;
 			displayObject.x = x;
