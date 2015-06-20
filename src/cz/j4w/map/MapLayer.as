@@ -12,6 +12,7 @@ package cz.j4w.map {
 	 */
 	public class MapLayer extends Sprite {
 		private var mapTilesBuffer:MapTilesBuffer;
+		private var _options:Object;
 		protected var map:Map;
 		protected var id:String;
 		protected var urlTemplate:String;
@@ -26,6 +27,7 @@ package cz.j4w.map {
 		
 		public function MapLayer(map:Map, id:String, options:Object, buffer:MapTilesBuffer) {
 			super();
+			this._options = options;
 			this.id = id;
 			this.map = map;
 			this.mapTilesBuffer = buffer;
@@ -134,6 +136,10 @@ package cz.j4w.map {
 		private function onEnterFrame(e:EnterFrameEvent):void {
 			checkTiles();
 			checkNotUsedTiles();
+		}
+		
+		public function get options():Object {
+			return _options;
 		}
 	
 	}
