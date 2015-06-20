@@ -1,8 +1,10 @@
 package cz.j4w.map.geo {
 	import cz.j4w.map.Map;
+	import cz.j4w.map.MapMarker;
 	import cz.j4w.map.MapOptions;
 	import flash.geom.Point;
 	import starling.animation.Tween;
+	import starling.display.DisplayObject;
 	
 	/**
 	 * Geo maps. Implements position methods with longitude and latitude.
@@ -19,6 +21,10 @@ package cz.j4w.map.geo {
 			
 			if (mapOptions.initialCenter)
 				setCenterLongLat(mapOptions.initialCenter.x, mapOptions.initialCenter.y);
+		}
+		
+		public function addMarkerLongLat(id:String, long:Number, lat:Number, displayObject:DisplayObject, data:Object = null):MapMarker {
+			return addMarker(id, GeoUtils.lon2x(long), GeoUtils.lat2y(lat), displayObject, data);
 		}
 		
 		public function getCenterLongLat():Point {
