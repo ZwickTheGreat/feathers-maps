@@ -10,6 +10,13 @@ package cz.j4w.map.geo {
 			return createMapLayerOptions(["http://mt1.google.com/vt/lyrs=r&x=${x}&y=${y}&z=${z}"]);
 		}
 		
+		public static function GOOGLE_MAPS_SCALED(scale:int):MapLayerOptions {
+			var googleMaps:MapLayerOptions = createMapLayerOptions(["http://mt1.google.com/vt/lyrs=r&x=${x}&y=${y}&z=${z}"]);
+			googleMaps.urlTemplate += "&scale=" + scale;
+			googleMaps.tileSize = 256 * scale;
+			return googleMaps;
+		}
+		
 		public static function get GOOGLE_MAPS_HYBRID():MapLayerOptions {
 			return createMapLayerOptions(["http://mt1.google.com/vt/lyrs=y&x=${x}&y=${y}&z=${z}"]);
 		}

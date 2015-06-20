@@ -7,18 +7,27 @@ package cz.j4w.map.geo {
 	public class GeoUtils {
 		public static const DEG_RAD:Number = PI / 180;
 		public static const RAD_DEG:Number = 180 / PI;
-		
-		public static const MAX_LONGITUDE:uint = 67108864 * 2;
-		public static const MAX_LATITUDE:uint = 67108864 * 2;
-		public static const EARTH_RADIUS:uint = 6371000; // in meters
-		
 		private static const PI:Number = Math.PI;
-		private static const C_LONGITUDE:Number = 360 / MAX_LONGITUDE;
-		private static const C_LATITUDE:Number = 2 * PI / MAX_LATITUDE;
-		private static const C_LATITUDE2:Number = MAX_LATITUDE / 2;
+		
+		public static const EARTH_RADIUS:uint = 6371000; // in meters
 		
 		private static const COS_1_EARTH_RADIUS:Number = Math.cos(1 / EARTH_RADIUS);
 		private static const SIN_1_EARTH_RADIUS:Number = Math.sin(1 / EARTH_RADIUS);
+		
+		public static var MAX_LONGITUDE:uint = 67108864 * 2;
+		public static var MAX_LATITUDE:uint = 67108864 * 2;
+		
+		private static var C_LONGITUDE:Number = 360 / MAX_LONGITUDE;
+		private static var C_LATITUDE:Number = 2 * PI / MAX_LATITUDE;
+		private static var C_LATITUDE2:Number = MAX_LATITUDE / 2;
+		
+		public static function set scale(value:int):void {
+			MAX_LONGITUDE = 67108864 * 2 * value;
+			MAX_LATITUDE = 67108864 * 2 * value;
+			C_LONGITUDE = 360 / MAX_LONGITUDE;
+			C_LATITUDE = 2 * PI / MAX_LATITUDE;
+			C_LATITUDE2 = MAX_LATITUDE / 2;
+		}
 		
 		/**
 		 * Converts x coordinate to lon.
