@@ -66,7 +66,7 @@ package cz.j4w.map {
 		}
 		
 		override protected function draw():void {
-			clipRect = bounds.clone();
+			clipRect = new Rectangle(0, 0, scaledActualWidth, scaledActualHeight);
 			update();
 		}
 		
