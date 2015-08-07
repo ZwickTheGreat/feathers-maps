@@ -33,6 +33,7 @@ package cz.j4w.map {
 		
 		protected var layers:Array;
 		protected var mapViewPort:Rectangle;
+		protected var centerBackup:Point;
 		
 		private var _scale:int;
 		private var _zoom:int;
@@ -46,6 +47,7 @@ package cz.j4w.map {
 			
 			mapTilesBuffer = new MapTilesBuffer();
 			markers = new Dictionary();
+			centerBackup = new Point();
 			mapViewPort = new Rectangle();
 			mapContainer = new Sprite();
 			markersContainer = new Sprite();
@@ -71,7 +73,7 @@ package cz.j4w.map {
 		
 		override protected function draw():void {
 			clipRect = new Rectangle(0, 0, scaledActualWidth, scaledActualHeight);
-			update();
+			setCenter(centerBackup);
 		}
 		
 		protected function update():void {
@@ -208,6 +210,7 @@ package cz.j4w.map {
 		
 		public function setCenterXY(x:Number, y:Number):void {
 			update();
+			centerBackup.setTo(x, y);
 			touchSheet.pivotX = x;
 			touchSheet.pivotY = y;
 			touchSheet.x = width / 2;
