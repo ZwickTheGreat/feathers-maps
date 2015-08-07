@@ -141,9 +141,13 @@ package cz.j4w.map {
 			displayObject.y = y;
 			markersContainer.addChild(displayObject);
 			
-			var mapMarker:MapMarker = new MapMarker(id, displayObject, data);
+			var mapMarker:MapMarker = createMarker(id, displayObject, data);
 			markers[id] = mapMarker;
 			return mapMarker;
+		}
+		
+		protected function createMarker(id:String, displayObject:DisplayObject, data:Object):MapMarker {
+			return new MapMarker(id, displayObject, data);
 		}
 		
 		public function getMarker(id:String):MapMarker {
