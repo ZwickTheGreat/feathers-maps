@@ -34,6 +34,9 @@ package cz.j4w.map {
 		protected var layers:Array;
 		protected var mapViewPort:Rectangle;
 		
+		private var _scale:int;
+		private var _zoom:int;
+		
 		public function Map(mapOptions:MapOptions) {
 			this.mapOptions = mapOptions;
 		}
@@ -76,6 +79,7 @@ package cz.j4w.map {
 			touchSheet.applyBounds();
 			getBounds(touchSheet, mapViewPort); // calculate mapViewPort after bounds check
 			updateMarkers();
+			updateZoomAndScale();
 		}
 		
 		protected function updateMarkers():void {
@@ -168,22 +172,26 @@ package cz.j4w.map {
 		}
 		
 		public function get zoom():int {
-			var s:uint = scale;
-			var z:int = 1;
-			while (s > 1) {
-				s >>= 1;
-				++z;
-			}
-			return z;
+			return _zoom;
 		}
 		
 		public function get scale():int {
-			var scale:uint = 1;
+			return _scale;
+		}
+		
+		private function updateZoomAndScale():void {
+			_scale = 1;
 			var z:int = int(1 / touchSheet.scaleX);
-			while (scale < z) {
-				scale <<= 1;
+			while (_scale < z) {
+				_scale <<= 1;
 			}
-			return scale;
+			
+			var s:uint = _scale;
+			_zoom = 1;
+			while (s > 1) {
+				s >>= 1;
+				++_zoom;
+			}
 		}
 		
 		public function setCenter(point:Point):void {
