@@ -1,5 +1,6 @@
 package cz.j4w.map.example {
 	import cz.j4w.map.geo.GeoMap;
+	import cz.j4w.map.geo.GeoUtils;
 	import cz.j4w.map.geo.Maps;
 	import cz.j4w.map.MapLayerOptions;
 	import cz.j4w.map.MapOptions;
@@ -31,9 +32,12 @@ package cz.j4w.map.example {
 			
 			Starling.current.showStats = true;
 			
+			var mapScale:Number = 2; // use 1 for non-retina displays
+			GeoUtils.scale = mapScale;
+			
 			var mapOptions:MapOptions = new MapOptions();
 			mapOptions.initialCenter = new Point(14.4777357, 50.1017711);
-			mapOptions.initialScale = 1 / 32;
+			mapOptions.initialScale = 1 / 32 / mapScale;
 			mapOptions.disableRotation = true;
 			
 			var geoMap:GeoMap = new GeoMap(mapOptions);
@@ -41,9 +45,8 @@ package cz.j4w.map.example {
 			geoMap.x = geoMap.y = 50;
 			addChild(geoMap);
 			
-			var googleMaps:MapLayerOptions = Maps.GOOGLE_MAPS;
+			var googleMaps:MapLayerOptions = Maps.GOOGLE_MAPS_SCALED(mapScale);
 			googleMaps.notUsedZoomThreshold = 1;
-			googleMaps.urlTemplate += "&scale=2";
 			geoMap.addLayer("googleMaps", googleMaps);
 			
 			var markerTexture:Texture = Texture.fromEmbeddedAsset(MarkerClass);
