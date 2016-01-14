@@ -1,5 +1,4 @@
 package cz.j4w.map {
-	import com.imageworks.debug.Debugger;
 	import cz.j4w.map.events.MapEvent;
 	import feathers.core.FeathersControl;
 	import flash.events.MouseEvent;
@@ -96,7 +95,7 @@ package cz.j4w.map {
 		
 		public function addLayer(id:String, options:Object = null):MapLayer {
 			if (layers[id]) {
-				Debugger.log("Layer", id, "already added.")
+				trace("Layer", id, "already added.")
 				return layers[id];
 			}
 			
