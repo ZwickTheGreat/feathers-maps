@@ -12,8 +12,8 @@ package cz.j4w.map {
 		public var disableZooming:Boolean;
 		public var initialCenter:Point;
 		public var initialScale:Number
-		public var maximumScale:Number;
-		public var minimumScale:Number;
+		public var maximumScale:Number = 1;
+		public var minimumScale:Number = 1 / Math.pow(2, 17);
 		public var movementBounds:Rectangle;
 		
 		public function MapOptions() {
