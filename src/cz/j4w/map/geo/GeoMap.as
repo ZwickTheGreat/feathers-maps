@@ -3,6 +3,7 @@ package cz.j4w.map.geo {
 	import cz.j4w.map.MapMarker;
 	import cz.j4w.map.MapOptions;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import starling.animation.Tween;
 	import starling.display.DisplayObject;
 	
@@ -13,6 +14,14 @@ package cz.j4w.map.geo {
 	public class GeoMap extends Map {
 		
 		public function GeoMap(mapOptions:MapOptions) {
+			var m:Rectangle = mapOptions.movementBounds;
+			if (m) {
+				// movements bounds are supposed to be lon/lat coords
+				m.left = GeoUtils.lon2x(m.left);
+				m.top = GeoUtils.lat2y(m.top);
+				m.right = GeoUtils.lon2x(m.right);
+				m.bottom = GeoUtils.lat2y(m.bottom);
+			}
 			super(mapOptions);
 		}
 		
