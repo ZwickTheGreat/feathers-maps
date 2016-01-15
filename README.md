@@ -3,7 +3,7 @@ Google (and more) tiled-based maps developed directly for Starling and Feathers 
 
 <img src="http://i.imgur.com/qnSQads.png" width="250"><img src="http://i.imgur.com/mJRQwCC.png" width="250">
 
-# Basic Google maps usage
+# Basic maps usage
 ```as3
 			var mapOptions:MapOptions = new MapOptions();
 			mapOptions.initialCenter = new Point(14.4777357, 50.1017711);
@@ -20,7 +20,8 @@ Google (and more) tiled-based maps developed directly for Starling and Feathers 
 			geoMap.addLayer("googleMaps", googleMaps);
 ```
 
-# Retina support
+# HiDPI tiles support
+Some map providers supports HiDPI tiles.
 ```as3
 			var mapScale:Number = 2; // use 1 for non-retina displays
 			GeoUtils.scale = mapScale;
