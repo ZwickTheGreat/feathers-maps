@@ -43,3 +43,17 @@ Some map providers supports HiDPI tiles.
 			}
 ```
 
+# Advantage against ANE
+You can use all the features (mask, filters, rotations, Sprite3D, etc.) of Starling!
+```as3
+			// greyscale filter
+			var colorMatrixFilter:ColorMatrixFilter = new ColorMatrixFilter(); 
+			colorMatrixFilter.adjustSaturation( -1);
+			geoMap.filter = colorMatrixFilter;
+			
+			// circle mask
+			var mask:Canvas = new Canvas();
+			mask.drawCircle(0, 0, 120);
+			geoMap.mask = mask;
+```
+
