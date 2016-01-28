@@ -2,7 +2,9 @@ package cz.j4w.map {
 	import feathers.controls.ImageLoader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
+	import flash.geom.Point;
 	import starling.core.Starling;
+	import starling.display.DisplayObject;
 	
 	/**
 	 * ...
@@ -37,6 +39,11 @@ package cz.j4w.map {
 		
 		public function get isDisposed():Boolean {
 			return _isDisposed;
+		}
+		
+		override public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject {
+			// all tiles are always able to touch
+			return forTouch ? this : super.hitTest(localPoint, forTouch);
 		}
 		
 		//*************************************************************//
