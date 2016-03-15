@@ -57,3 +57,10 @@ You can use all the features (mask, filters, rotations, Sprite3D, etc.) of Starl
 			geoMap.mask = mask;
 ```
 
+# Supported dependencies
+Starling 1.7
+
+# Roadmap
+Support for Starling 2.0 after it's release.
+
+
