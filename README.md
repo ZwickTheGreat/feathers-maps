@@ -1,4 +1,6 @@
 # AS3 Starling/Feathers maps
+Updated for beta Starling 2.0
+
 Google (and more) tiled-based maps developed directly for Starling and Feathers and optimized for mobile devices (Adobe AIR).
 
 <img src="http://i.imgur.com/qnSQads.png" width="250"><img src="http://i.imgur.com/mJRQwCC.png" width="250">
