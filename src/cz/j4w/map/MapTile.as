@@ -41,9 +41,9 @@ package cz.j4w.map {
 			return _isDisposed;
 		}
 		
-		override public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject {
+		override public function hitTest(localPoint:Point):DisplayObject {
 			// all tiles are always able to touch
-			return forTouch ? this : super.hitTest(localPoint, forTouch);
+			return this;
 		}
 		
 		//*************************************************************//

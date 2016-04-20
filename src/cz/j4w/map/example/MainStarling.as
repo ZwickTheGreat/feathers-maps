@@ -1,24 +1,25 @@
 package cz.j4w.map.example {
+	import cz.j4w.map.MapLayerOptions;
+	import cz.j4w.map.MapOptions;
+	import cz.j4w.map.events.MapEvent;
 	import cz.j4w.map.geo.GeoMap;
 	import cz.j4w.map.geo.GeoUtils;
 	import cz.j4w.map.geo.Maps;
-	import cz.j4w.map.MapLayerOptions;
-	import cz.j4w.map.MapOptions;
 	import feathers.core.FeathersControl;
+	import feathers.layout.HorizontalAlign;
+	import feathers.layout.VerticalAlign;
 	import flash.geom.Point;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.textures.Texture;
-	import starling.utils.HAlign;
-	import starling.utils.VAlign;
 	
 	/**
 	 * Map test.
 	 * @author Jakub Wagner, J4W
 	 */
 	public class MainStarling extends FeathersControl {
-		[Embed(source="marker.png")]
+		[Embed(source = "marker.png")]
 		private var MarkerClass:Class;
 		
 		private var background:Quad;
@@ -29,8 +30,8 @@ package cz.j4w.map.example {
 		
 		override protected function initialize():void {
 			super.initialize();
-			
 			Starling.current.showStats = true;
+			Starling.current.skipUnchangedFrames = true;
 			
 			var mapScale:Number = 2; // use 1 for non-retina displays
 			GeoUtils.scale = mapScale;
@@ -53,10 +54,15 @@ package cz.j4w.map.example {
 			
 			for (var i:int = 0; i < 100; i++) {
 				var image:Image = new Image(markerTexture);
-				image.alignPivot(HAlign.CENTER, VAlign.BOTTOM);
+				image.alignPivot(HorizontalAlign.CENTER, VerticalAlign.BOTTOM);
 				
 				geoMap.addMarkerLongLat("marker" + i, mapOptions.initialCenter.x + .1 - Math.random() * .2, mapOptions.initialCenter.y + .1 - Math.random() * .2, image);
 			}
+			geoMap.addEventListener(MapEvent.MARKER_TRIGGERED, onGeoMapMarkerTriggered);
+		}
+		
+		private function onGeoMapMarkerTriggered(e:MapEvent):void {
+			trace(e.target);
 		}
 	
 	}

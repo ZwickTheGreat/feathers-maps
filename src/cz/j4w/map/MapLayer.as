@@ -52,7 +52,7 @@ package cz.j4w.map {
 			var mapViewPort:Rectangle = map.viewPort;
 			
 			var zoom:int = map.zoom;
-			var scale:int = map.scale;
+			var scale:int = map.scaleRatio;
 			var actualTileSize:Number = tileSize * scale;
 			
 			var startX:int = Math.floor(mapViewPort.left / actualTileSize);
