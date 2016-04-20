@@ -1,7 +1,7 @@
 # AS3 Starling/Feathers maps
 Google (and more) tiled-based maps developed directly for Starling and Feathers and optimized for mobile devices (Adobe AIR).
 
-<img src="http://i.imgur.com/qnSQads.png" width="250"><img src="http://i.imgur.com/mJRQwCC.png" width="250">
+<img src="http://i.imgur.com/NSDfjoq.png" width="250">
 
 # Basic maps usage
 ```as3
@@ -58,9 +58,8 @@ You can use all the features (mask, filters, rotations, Sprite3D, etc.) of Starl
 ```
 
 # Supported dependencies
-Starling 1.7
-
-# Roadmap
-Support for Starling 2.0 after it's release.
++ Starling 2.0
++ Feathers 3.0 beta
++ AIR 19+
 
 
